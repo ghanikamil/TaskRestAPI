@@ -7,9 +7,9 @@
 <h1>GetFromServices</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="CreateFromServices">Create New</a>
 </p>
-<table class="table">
+<table class="table table-striped">
     <thead>
         <tr>
             <th>
@@ -31,9 +31,9 @@
                 @Html.DisplayFor(modelItem => item.categoryName)
             </td>
             <td>
-                @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+                @Html.ActionLink("Edit", "EditFromServices", new { id=item.categoryID}) |
                 @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+                    @Html.ActionLink("Delete", "DeleteFromServices", new { id = item.categoryID })
             </td>
         </tr>
 }

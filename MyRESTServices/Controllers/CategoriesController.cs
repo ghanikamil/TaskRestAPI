@@ -36,7 +36,7 @@ namespace MyRESTServices.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post(CategoryCreateDTO categoryCreateDTO)
+        public async Task<IActionResult> Post(int id,CategoryCreateDTO categoryCreateDTO)
         {
 
             try
@@ -48,7 +48,8 @@ namespace MyRESTServices.Controllers
                     return BadRequest(eror);
                 }
                 var result = await _categoryBLL.Insert(categoryCreateDTO);
-                return Ok("Insert data success");
+                return CreatedAtAction("Get",new { id = id }, result);
+                //return Ok("Insert data success");
             }
             catch (Exception ex)
             {

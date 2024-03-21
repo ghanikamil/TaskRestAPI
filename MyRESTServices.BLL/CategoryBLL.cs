@@ -63,13 +63,14 @@ namespace MyRESTServices.BLL
             throw new NotImplementedException();
         }
 
-        public async Task<Task> Insert(CategoryCreateDTO entity)
+        public async Task<CategoryDTO> Insert(CategoryCreateDTO entity)
         {
             try
             {
                 var category = _mapper.Map<Category>(entity);
                 var addCategory = await _categoryData.Insert(category);
-                return Task.CompletedTask;
+                var categoryDto = _mapper.Map<CategoryDTO>(addCategory);
+                return categoryDto;
             }
             catch (Exception ex)
             {

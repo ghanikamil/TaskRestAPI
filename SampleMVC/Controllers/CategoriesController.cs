@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using MyWebFormApp.BLL.DTOs;
+using MyRESTServices.BLL.DTOs;
 using MyWebFormApp.BLL.Interfaces;
 using SampleMVC.Models;
 using SampleMVC.Services;
@@ -99,6 +99,48 @@ public class CategoriesController : Controller
             });
         }
         return View(categoriesList);
+    }
+    public IActionResult CreateFromServices()
+    {
+        return View();
+    }
+    [HttpPost]
+    public async Task<IActionResult> CreateFromServices(CategoryCreateDTO categoryCreateDTO)
+    {
+        await _categoryServices.Insert(categoryCreateDTO);
+        return RedirectToAction("GetFromServices");
+    }
+
+    public async Task<IActionResult> EditFromServices(int id)
+    {
+        var model = await _categoryServices.GetById(id);
+        return View(model);
+    }
+    [HttpPost]
+    public async Task<IActionResult> EditFromServices(int id, CategoryUpdateDTO categoryUpdateDTO)
+    {
+        await _categoryServices.Update(id, categoryUpdateDTO);
+        return RedirectToAction("GetFromServices");
+    }
+    public async Task<IActionResult> DeleteFromServices(int id)
+    {
+        var model = await _categoryServices.GetById(id);
+        return View(model);
+    }
+    [HttpPost]
+    public async Task<IActionResult> DeleteFromServices(int id, CategoryDTO category)
+    {
+        try
+        {
+            await _categoryServices.Delete(id);
+            TempData["message"] = @"<div class='alert alert-success'><strong>Success!</strong>Delete Data Category Success !</div>";
+        }
+        catch (Exception ex)
+        {
+            TempData["message"] = $"<div class='alert alert-danger'><strong>Error!</strong>{ex.Message}</div>";
+            return View(category);
+        }
+        return RedirectToAction("GetFromServices");
     }
 
 
@@ -207,16 +249,16 @@ public class CategoriesController : Controller
     [HttpPost]
     public IActionResult Edit(int id, CategoryUpdateDTO categoryEdit)
     {
-        try
-        {
-            _categoryBLL.Update(categoryEdit);
-            TempData["message"] = @"<div class='alert alert-success'><strong>Success!</strong>Edit Data Category Success !</div>";
-        }
-        catch (Exception ex)
-        {
-            ViewData["message"] = $"<div class='alert alert-danger'><strong>Error!</strong>{ex.Message}</div>";
-            return View(categoryEdit);
-        }
+        //try
+        //{
+        //    _categoryBLL.Update(categoryEdit);
+        //    TempData["message"] = @"<div class='alert alert-success'><strong>Success!</strong>Edit Data Category Success !</div>";
+        //}
+        //catch (Exception ex)
+        //{
+        //    ViewData["message"] = $"<div class='alert alert-danger'><strong>Error!</strong>{ex.Message}</div>";
+        //    return View(categoryEdit);
+        //}
         return RedirectToAction("Index");
     }
 

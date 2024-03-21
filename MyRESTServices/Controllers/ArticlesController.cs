@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MyRESTServices.BLL.DTOs;
 using MyRESTServices.BLL.Interfaces;
+using MyRESTServices.Models;
 
 namespace MyRESTServices.Controllers
 {
@@ -87,6 +88,33 @@ namespace MyRESTServices.Controllers
             {
                 return BadRequest(ex.Message);
             }
+        }
+        [HttpPost("upload")]
+        public async Task<IActionResult> Post([FromForm] ArticleWithFile articleWithFile)
+        {
+            if (articleWithFile.file == null || articleWithFile.file.Length == 0)
+            {
+                return BadRequest("File is required");
+            }
+            var newName = $"{Guid.NewGuid()}_{articleWithFile.file.FileName}";
+            var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", newName);
+            using (var stream = new FileStream(path, FileMode.Create))
+            {
+                await articleWithFile.file.CopyToAsync(stream);
+            }
+
+            var articleCreateDTO = new ArticleCreateDTO
+            {
+                CategoryID = articleWithFile.CategoryId,
+                Title = articleWithFile.Title,
+                Details = articleWithFile.Details,
+                IsApproved = articleWithFile.IsApproved,
+                Pic = newName
+            };
+
+            var article = await _articleBLL.Insert(articleCreateDTO);
+
+            return Ok("upload data success");
         }
     }
 }
