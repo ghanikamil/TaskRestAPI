@@ -58,9 +58,28 @@ namespace MyRESTServices.Data
             throw new NotImplementedException();
         }
 
-        public Task<IEnumerable<Category>> GetWithPaging(int pageNumber, int pageSize, string name)
+        public async Task<IEnumerable<Category>> GetWithPaging(int pageNumber, int pageSize, string name)
         {
-            throw new NotImplementedException();
+            IEnumerable<Category> categories;
+            if (name == "")
+            {
+                categories = await _context.Categories
+                    .OrderBy(c => c.CategoryName)
+                    .Skip((pageNumber - 1) * pageSize)
+                    .Take(pageSize)
+                    .ToListAsync();
+                return categories;
+            }
+            else
+            {
+                categories = await _context.Categories
+                    .Where(c => c.CategoryName.Contains(name))
+                    .OrderBy(c => c.CategoryName)
+                    .Skip((pageNumber - 1) * pageSize)
+                    .Take(pageSize)
+                    .ToListAsync();
+                return categories;
+            }
         }
 
         public async Task<Category> Insert(Category entity)

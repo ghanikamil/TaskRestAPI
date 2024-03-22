@@ -18,6 +18,8 @@ namespace MyRESTServices.BLL.Profiles
             CreateMap<ArticleUpdateDTO, Article>();
 
             CreateMap<Role, RoleDTO>().ReverseMap();
+            CreateMap<User, UserDTO>().ReverseMap();
+            CreateMap<UserCreateDTO, User>();
         }
     }
 }

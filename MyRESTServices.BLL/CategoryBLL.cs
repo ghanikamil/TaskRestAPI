@@ -58,9 +58,11 @@ namespace MyRESTServices.BLL
             throw new NotImplementedException();
         }
 
-        public Task<IEnumerable<CategoryDTO>> GetWithPaging(int pageNumber, int pageSize, string name)
+        public async Task<IEnumerable<CategoryDTO>> GetWithPaging(int pageNumber, int pageSize, string name)
         {
-            throw new NotImplementedException();
+            var categories = await _categoryData.GetWithPaging(pageNumber, pageSize, name);
+            var categoriesDto = _mapper.Map<IEnumerable<CategoryDTO>>(categories);
+            return categoriesDto;
         }
 
         public async Task<CategoryDTO> Insert(CategoryCreateDTO entity)
